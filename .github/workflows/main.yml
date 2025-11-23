@@ -1,0 +1,31 @@
+name: Daily Committer
+
+on:
+  schedule:
+    # Run every day at 12:00 UTC
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+
+    # Add this permissions block
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Configure Git
+      run: |
+        git config user.name "warning57"
+        git config user.email "warninggg57@gmail.com"
+
+    - name: Make daily commit
+      run: |
+        echo "Daily commit on $(date)" >> log.txt
+        git add log.txt
+        git commit -m "Daily commit: $(date)" || echo "No changes to commit"
+        git push
